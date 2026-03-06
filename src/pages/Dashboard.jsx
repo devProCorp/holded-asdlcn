@@ -283,27 +283,27 @@ export default function Dashboard() {
 
       {/* Charts row */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 bg-white rounded-xl border border-gray-200 p-5">
-          <h3 className="text-sm font-medium text-gray-500 mb-4">Ventas vs Compras (mensual)</h3>
+        <div className="lg:col-span-2 bg-neutral-900 rounded-xl border border-neutral-800 p-5">
+          <h3 className="text-sm font-medium text-neutral-500 mb-4">Ventas vs Compras (mensual)</h3>
           {monthlyChartData.length > 0 ? (
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={monthlyChartData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                <XAxis dataKey="month" tick={{ fontSize: 11 }} />
-                <YAxis tick={{ fontSize: 11 }} tickFormatter={(v) => `${(v / 1000).toFixed(0)}k`} />
-                <Tooltip formatter={(v) => formatCurrency(v)} />
-                <Legend />
+                <CartesianGrid strokeDasharray="3 3" stroke="#262626" />
+                <XAxis dataKey="month" tick={{ fontSize: 11, fill: '#a3a3a3' }} />
+                <YAxis tick={{ fontSize: 11, fill: '#a3a3a3' }} tickFormatter={(v) => `${(v / 1000).toFixed(0)}k`} />
+                <Tooltip formatter={(v) => formatCurrency(v)} contentStyle={{ backgroundColor: '#171717', border: '1px solid #404040', borderRadius: '8px', color: '#e5e5e5' }} />
+                <Legend wrapperStyle={{ color: '#a3a3a3' }} />
                 <Bar dataKey="ventas" fill="#10b981" radius={[4, 4, 0, 0]} name="Ventas" />
                 <Bar dataKey="compras" fill="#3b82f6" radius={[4, 4, 0, 0]} name="Compras" />
               </BarChart>
             </ResponsiveContainer>
           ) : (
-            <p className="text-gray-400 text-sm py-10 text-center">Sin datos</p>
+            <p className="text-neutral-600 text-sm py-10 text-center">Sin datos</p>
           )}
         </div>
 
-        <div className="bg-white rounded-xl border border-gray-200 p-5">
-          <h3 className="text-sm font-medium text-gray-500 mb-4">Estado facturas venta</h3>
+        <div className="bg-neutral-900 rounded-xl border border-neutral-800 p-5">
+          <h3 className="text-sm font-medium text-neutral-500 mb-4">Estado facturas venta</h3>
           {invoiceStatusPie.length > 0 ? (
             <>
               <ResponsiveContainer width="100%" height={250}>
@@ -313,12 +313,12 @@ export default function Dashboard() {
                       <Cell key={i} fill={COLORS[i % COLORS.length]} />
                     ))}
                   </Pie>
-                  <Tooltip />
+                  <Tooltip contentStyle={{ backgroundColor: '#171717', border: '1px solid #404040', borderRadius: '8px', color: '#e5e5e5' }} />
                 </PieChart>
               </ResponsiveContainer>
               <div className="flex justify-center gap-4 mt-2">
                 {invoiceStatusPie.map((entry, i) => (
-                  <div key={entry.name} className="flex items-center gap-2 text-xs">
+                  <div key={entry.name} className="flex items-center gap-2 text-xs text-neutral-400">
                     <div className="w-3 h-3 rounded-full" style={{ backgroundColor: COLORS[i] }} />
                     {entry.name}: {entry.value}
                   </div>
@@ -326,23 +326,23 @@ export default function Dashboard() {
               </div>
             </>
           ) : (
-            <p className="text-gray-400 text-sm py-10 text-center">Sin facturas</p>
+            <p className="text-neutral-600 text-sm py-10 text-center">Sin facturas</p>
           )}
         </div>
       </div>
 
       {/* ===== EXPENSE BREAKDOWN SECTION WITH DATE FILTER ===== */}
-      <div className="bg-white rounded-xl border border-gray-200 p-5">
+      <div className="bg-neutral-900 rounded-xl border border-neutral-800 p-5">
         <div className="flex items-center justify-between mb-4">
           <div>
             <h3 className="text-lg font-bold">Desglose de gastos</h3>
-            <p className="text-sm text-gray-500 mt-1">
+            <p className="text-sm text-neutral-500 mt-1">
               Analisis por categoria contable — {filteredPurchases.length} facturas de compra
             </p>
           </div>
           <div className="text-right">
-            <p className="text-sm text-gray-500">Total gastos (base)</p>
-            <p className="text-xl font-bold text-red-600">{formatCurrency(totalExpenseAmount)}</p>
+            <p className="text-sm text-neutral-500">Total gastos (base)</p>
+            <p className="text-xl font-bold text-red-400">{formatCurrency(totalExpenseAmount)}</p>
           </div>
         </div>
 
@@ -350,15 +350,15 @@ export default function Dashboard() {
         <div className="mb-6 space-y-3">
           {/* Preset buttons */}
           <div className="flex gap-2 flex-wrap">
-            <Calendar size={16} className="text-gray-400 mt-1.5" />
+            <Calendar size={16} className="text-neutral-600 mt-1.5" />
             {presets.map((p) => (
               <button
                 key={p.key}
                 onClick={() => handlePreset(p.key)}
                 className={`px-3 py-1.5 text-xs font-medium rounded-lg border transition-colors ${
                   datePreset === p.key
-                    ? 'bg-red-600 text-white border-red-600'
-                    : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'
+                    ? 'bg-white text-black border-white'
+                    : 'bg-transparent text-neutral-400 border-neutral-700 hover:bg-neutral-800'
                 }`}
               >
                 {p.label}
@@ -366,10 +366,10 @@ export default function Dashboard() {
             ))}
           </div>
 
-          {/* Custom date inputs (always visible for quick tweaking, highlighted when custom) */}
+          {/* Custom date inputs */}
           <div className="flex items-center gap-3 flex-wrap">
             <div className="flex items-center gap-2">
-              <label className="text-xs text-gray-500">Desde:</label>
+              <label className="text-xs text-neutral-500">Desde:</label>
               <input
                 type="date"
                 value={customFrom}
@@ -378,11 +378,11 @@ export default function Dashboard() {
                   setDatePreset('custom');
                   setExpandedCategory(null);
                 }}
-                className="px-2 py-1.5 text-xs border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                className="px-2 py-1.5 text-xs bg-neutral-800 border border-neutral-700 rounded-lg text-neutral-200 focus:outline-none focus:ring-2 focus:ring-neutral-500 focus:border-transparent"
               />
             </div>
             <div className="flex items-center gap-2">
-              <label className="text-xs text-gray-500">Hasta:</label>
+              <label className="text-xs text-neutral-500">Hasta:</label>
               <input
                 type="date"
                 value={customTo}
@@ -391,12 +391,12 @@ export default function Dashboard() {
                   setDatePreset('custom');
                   setExpandedCategory(null);
                 }}
-                className="px-2 py-1.5 text-xs border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                className="px-2 py-1.5 text-xs bg-neutral-800 border border-neutral-700 rounded-lg text-neutral-200 focus:outline-none focus:ring-2 focus:ring-neutral-500 focus:border-transparent"
               />
             </div>
-            <span className="text-xs text-gray-400 ml-2">{dateLabel}</span>
+            <span className="text-xs text-neutral-500 ml-2">{dateLabel}</span>
             {datePreset !== 'all' && (
-              <span className="text-xs bg-red-50 text-red-600 px-2 py-1 rounded-full font-medium">
+              <span className="text-xs bg-red-950/30 text-red-400 px-2 py-1 rounded-full font-medium">
                 {filteredPurchases.length} de {purchaseData.length} facturas
               </span>
             )}
@@ -405,7 +405,7 @@ export default function Dashboard() {
 
         {/* Content */}
         {sortedCategories.length === 0 ? (
-          <p className="text-gray-400 text-center py-10">No hay gastos en el rango seleccionado</p>
+          <p className="text-neutral-600 text-center py-10">No hay gastos en el rango seleccionado</p>
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Pie chart */}
@@ -421,13 +421,13 @@ export default function Dashboard() {
                     paddingAngle={2}
                     dataKey="value"
                     label={({ name, percent }) => `${name.length > 15 ? name.substring(0, 15) + '...' : name} ${(percent * 100).toFixed(0)}%`}
-                    labelLine={{ strokeWidth: 1 }}
+                    labelLine={{ strokeWidth: 1, stroke: '#525252' }}
                   >
                     {expensePieData.map((_, i) => (
                       <Cell key={i} fill={COLORS[i % COLORS.length]} />
                     ))}
                   </Pie>
-                  <Tooltip formatter={(v) => formatCurrency(v)} />
+                  <Tooltip formatter={(v) => formatCurrency(v)} contentStyle={{ backgroundColor: '#171717', border: '1px solid #404040', borderRadius: '8px', color: '#e5e5e5' }} />
                 </PieChart>
               </ResponsiveContainer>
             </div>
@@ -446,13 +446,13 @@ export default function Dashboard() {
                         <span className="text-sm">{cat.icon}</span>
                         <span className="text-sm font-medium flex-1">{cat.name}</span>
                         <span className="text-sm font-bold">{formatCurrency(cat.total)}</span>
-                        <span className="text-xs text-gray-400 w-12 text-right">{pct.toFixed(1)}%</span>
+                        <span className="text-xs text-neutral-500 w-12 text-right">{pct.toFixed(1)}%</span>
                         {expandedCategory === prefix
-                          ? <ChevronDown size={14} className="text-gray-400" />
-                          : <ChevronRight size={14} className="text-gray-400" />
+                          ? <ChevronDown size={14} className="text-neutral-500" />
+                          : <ChevronRight size={14} className="text-neutral-500" />
                         }
                       </div>
-                      <div className="w-full bg-gray-100 rounded-full h-2.5">
+                      <div className="w-full bg-neutral-800 rounded-full h-2.5">
                         <div
                           className="h-2.5 rounded-full transition-all"
                           style={{
@@ -464,15 +464,15 @@ export default function Dashboard() {
                     </button>
 
                     {expandedCategory === prefix && (
-                      <div className="mt-2 mb-3 ml-6 bg-gray-50 rounded-lg border border-gray-100 overflow-hidden">
+                      <div className="mt-2 mb-3 ml-6 bg-neutral-800 rounded-lg border border-neutral-700 overflow-hidden">
                         {getExpandedDetails(prefix).map((group) => (
-                          <div key={group.account} className="border-b border-gray-100 last:border-0">
-                            <div className="flex items-center justify-between px-4 py-2 bg-gray-50">
+                          <div key={group.account} className="border-b border-neutral-700 last:border-0">
+                            <div className="flex items-center justify-between px-4 py-2 bg-neutral-800">
                               <div>
-                                <span className="text-xs font-medium text-gray-700">{group.account}</span>
-                                <span className="text-xs text-gray-400 ml-2">({group.accountNum})</span>
+                                <span className="text-xs font-medium text-neutral-300">{group.account}</span>
+                                <span className="text-xs text-neutral-500 ml-2">({group.accountNum})</span>
                               </div>
-                              <span className="text-xs font-bold text-gray-700">{formatCurrency(group.total)}</span>
+                              <span className="text-xs font-bold text-neutral-300">{formatCurrency(group.total)}</span>
                             </div>
                             <table className="w-full text-xs">
                               <tbody>
@@ -480,17 +480,17 @@ export default function Dashboard() {
                                   .sort((a, b) => b.amount - a.amount)
                                   .slice(0, 10)
                                   .map((item, j) => (
-                                    <tr key={j} className="border-t border-gray-50 hover:bg-white">
-                                      <td className="px-4 py-1.5 text-gray-500 w-20">{formatDate(item.date)}</td>
-                                      <td className="px-2 py-1.5 text-gray-600 truncate max-w-[120px]" title={item.contact}>{item.contact}</td>
-                                      <td className="px-2 py-1.5 text-gray-400 truncate max-w-[100px]" title={item.desc}>{item.desc || '-'}</td>
-                                      <td className="px-2 py-1.5 text-gray-500 truncate max-w-[80px]" title={item.docNumber}>{item.docNumber}</td>
-                                      <td className="px-4 py-1.5 text-right font-medium text-gray-700">{formatCurrency(item.amount)}</td>
+                                    <tr key={j} className="border-t border-neutral-700/50 hover:bg-neutral-700/30">
+                                      <td className="px-4 py-1.5 text-neutral-500 w-20">{formatDate(item.date)}</td>
+                                      <td className="px-2 py-1.5 text-neutral-300 truncate max-w-[120px]" title={item.contact}>{item.contact}</td>
+                                      <td className="px-2 py-1.5 text-neutral-500 truncate max-w-[100px]" title={item.desc}>{item.desc || '-'}</td>
+                                      <td className="px-2 py-1.5 text-neutral-500 truncate max-w-[80px]" title={item.docNumber}>{item.docNumber}</td>
+                                      <td className="px-4 py-1.5 text-right font-medium text-neutral-200">{formatCurrency(item.amount)}</td>
                                     </tr>
                                   ))}
                                 {group.items.length > 10 && (
                                   <tr>
-                                    <td colSpan={5} className="px-4 py-1.5 text-center text-gray-400">
+                                    <td colSpan={5} className="px-4 py-1.5 text-center text-neutral-500">
                                       y {group.items.length - 10} lineas mas...
                                     </td>
                                   </tr>
@@ -511,14 +511,14 @@ export default function Dashboard() {
 
       {/* Top suppliers chart */}
       {topSuppliers.length > 0 && (
-        <div className="bg-white rounded-xl border border-gray-200 p-5">
-          <h3 className="text-sm font-medium text-gray-500 mb-4">Top proveedores por volumen de compras</h3>
+        <div className="bg-neutral-900 rounded-xl border border-neutral-800 p-5">
+          <h3 className="text-sm font-medium text-neutral-500 mb-4">Top proveedores por volumen de compras</h3>
           <ResponsiveContainer width="100%" height={250}>
             <BarChart data={topSuppliers} layout="vertical">
-              <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-              <XAxis type="number" tick={{ fontSize: 11 }} tickFormatter={(v) => `${(v / 1000).toFixed(0)}k`} />
-              <YAxis type="category" dataKey="name" tick={{ fontSize: 11 }} width={160} />
-              <Tooltip formatter={(v) => formatCurrency(v)} />
+              <CartesianGrid strokeDasharray="3 3" stroke="#262626" />
+              <XAxis type="number" tick={{ fontSize: 11, fill: '#a3a3a3' }} tickFormatter={(v) => `${(v / 1000).toFixed(0)}k`} />
+              <YAxis type="category" dataKey="name" tick={{ fontSize: 11, fill: '#a3a3a3' }} width={160} />
+              <Tooltip formatter={(v) => formatCurrency(v)} contentStyle={{ backgroundColor: '#171717', border: '1px solid #404040', borderRadius: '8px', color: '#e5e5e5' }} />
               <Bar dataKey="total" fill="#8b5cf6" radius={[0, 4, 4, 0]} />
             </BarChart>
           </ResponsiveContainer>
@@ -527,29 +527,29 @@ export default function Dashboard() {
 
       {/* Recent documents tables */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white rounded-xl border border-gray-200 p-5">
-          <h3 className="text-sm font-medium text-gray-500 mb-4">Ultimas facturas de venta</h3>
+        <div className="bg-neutral-900 rounded-xl border border-neutral-800 p-5">
+          <h3 className="text-sm font-medium text-neutral-500 mb-4">Ultimas facturas de venta</h3>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-gray-200">
-                  <th className="px-3 py-2 text-left text-gray-500 font-medium">Num</th>
-                  <th className="px-3 py-2 text-left text-gray-500 font-medium">Cliente</th>
-                  <th className="px-3 py-2 text-right text-gray-500 font-medium">Total</th>
-                  <th className="px-3 py-2 text-center text-gray-500 font-medium">Estado</th>
+                <tr className="border-b border-neutral-800">
+                  <th className="px-3 py-2 text-left text-neutral-500 font-medium">Num</th>
+                  <th className="px-3 py-2 text-left text-neutral-500 font-medium">Cliente</th>
+                  <th className="px-3 py-2 text-right text-neutral-500 font-medium">Total</th>
+                  <th className="px-3 py-2 text-center text-neutral-500 font-medium">Estado</th>
                 </tr>
               </thead>
               <tbody>
                 {recentInvoices.map((inv) => {
                   const isPaid = Number(inv.paymentsPending) === 0 && Number(inv.total) > 0;
                   return (
-                    <tr key={inv.id} className="border-b border-gray-100">
+                    <tr key={inv.id} className="border-b border-neutral-800/50">
                       <td className="px-3 py-2 font-medium">{inv.docNumber || '-'}</td>
                       <td className="px-3 py-2 truncate max-w-[150px]">{inv.contactName?.split(' (')[0] || '-'}</td>
                       <td className="px-3 py-2 text-right">{formatCurrency(inv.total)}</td>
                       <td className="px-3 py-2 text-center">
                         <span className={`inline-block px-2 py-0.5 rounded-full text-xs font-medium ${
-                          inv.draft ? 'bg-gray-100 text-gray-600' : isPaid ? 'bg-green-100 text-green-700' : 'bg-orange-100 text-orange-700'
+                          inv.draft ? 'bg-neutral-800 text-neutral-400' : isPaid ? 'bg-green-950/40 text-green-400' : 'bg-orange-950/40 text-orange-400'
                         }`}>
                           {inv.draft ? 'Borrador' : isPaid ? 'Pagada' : 'Pendiente'}
                         </span>
@@ -558,36 +558,36 @@ export default function Dashboard() {
                   );
                 })}
                 {recentInvoices.length === 0 && (
-                  <tr><td colSpan={4} className="px-3 py-6 text-center text-gray-400">Sin facturas</td></tr>
+                  <tr><td colSpan={4} className="px-3 py-6 text-center text-neutral-600">Sin facturas</td></tr>
                 )}
               </tbody>
             </table>
           </div>
         </div>
 
-        <div className="bg-white rounded-xl border border-gray-200 p-5">
-          <h3 className="text-sm font-medium text-gray-500 mb-4">Ultimas compras</h3>
+        <div className="bg-neutral-900 rounded-xl border border-neutral-800 p-5">
+          <h3 className="text-sm font-medium text-neutral-500 mb-4">Ultimas compras</h3>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-gray-200">
-                  <th className="px-3 py-2 text-left text-gray-500 font-medium">Num</th>
-                  <th className="px-3 py-2 text-left text-gray-500 font-medium">Proveedor</th>
-                  <th className="px-3 py-2 text-right text-gray-500 font-medium">Total</th>
-                  <th className="px-3 py-2 text-center text-gray-500 font-medium">Estado</th>
+                <tr className="border-b border-neutral-800">
+                  <th className="px-3 py-2 text-left text-neutral-500 font-medium">Num</th>
+                  <th className="px-3 py-2 text-left text-neutral-500 font-medium">Proveedor</th>
+                  <th className="px-3 py-2 text-right text-neutral-500 font-medium">Total</th>
+                  <th className="px-3 py-2 text-center text-neutral-500 font-medium">Estado</th>
                 </tr>
               </thead>
               <tbody>
                 {recentPurchases.map((p) => {
                   const isPaid = Number(p.paymentsPending) === 0 && Number(p.total) > 0;
                   return (
-                    <tr key={p.id} className="border-b border-gray-100">
+                    <tr key={p.id} className="border-b border-neutral-800/50">
                       <td className="px-3 py-2 font-medium">{p.docNumber || '-'}</td>
                       <td className="px-3 py-2 truncate max-w-[150px]">{p.contactName?.split(' (')[0] || '-'}</td>
                       <td className="px-3 py-2 text-right">{formatCurrency(p.total)}</td>
                       <td className="px-3 py-2 text-center">
                         <span className={`inline-block px-2 py-0.5 rounded-full text-xs font-medium ${
-                          p.draft ? 'bg-gray-100 text-gray-600' : isPaid ? 'bg-green-100 text-green-700' : 'bg-orange-100 text-orange-700'
+                          p.draft ? 'bg-neutral-800 text-neutral-400' : isPaid ? 'bg-green-950/40 text-green-400' : 'bg-orange-950/40 text-orange-400'
                         }`}>
                           {p.draft ? 'Borrador' : isPaid ? 'Pagada' : 'Pendiente'}
                         </span>

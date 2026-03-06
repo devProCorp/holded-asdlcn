@@ -38,24 +38,16 @@ const CATEGORY_MAP = {
 
 const STORAGE_KEY = 'holded_budgets';
 
-// Objetivos predefinidos por categoria (editar aqui para proximas revisiones)
 const DEFAULT_BUDGETS = {
-  '600': 95000,   // Compras mercaderias — actual ~96.3k, objetivo reducir ~1.4%
-  '602': 400,     // Otros aprovisionamientos — actual ~424
-  '621': 11500,   // Alquileres y renting — actual ~11.8k, objetivo reducir ~2.4%
-  '622': 250,     // Reparaciones — actual ~205, margen para imprevistos
-  '623': 50,      // Servicios profesionales — actual ~33
-  '624': 3800,    // Transportes — actual ~3.9k, objetivo reducir ~3%
-  '627': 3500,    // Publicidad y marketing — actual ~3.8k, objetivo reducir ~7%
-  '628': 5200,    // Suministros — actual ~5.4k, objetivo reducir ~4%
-  '629': 6500,    // Otros servicios — actual ~7k, objetivo reducir ~7%
-};
-
-const GRADIENTS = {
-  red: 'from-red-500 to-rose-600',
-  blue: 'from-blue-500 to-indigo-600',
-  amber: 'from-amber-500 to-orange-600',
-  green: 'from-emerald-500 to-green-600',
+  '600': 95000,
+  '602': 400,
+  '621': 11500,
+  '622': 250,
+  '623': 50,
+  '624': 3800,
+  '627': 3500,
+  '628': 5200,
+  '629': 6500,
 };
 
 const getPresetRange = (key) => {
@@ -78,7 +70,7 @@ const toInputDate = (d) => d ? d.toISOString().split('T')[0] : '';
 function BudgetGauge({ spent, budget }) {
   const pct = budget > 0 ? Math.min((spent / budget) * 100, 150) : 0;
   const isOver = spent > budget && budget > 0;
-  const color = budget <= 0 ? '#94a3b8' : isOver ? '#ef4444' : pct > 80 ? '#f59e0b' : '#10b981';
+  const color = budget <= 0 ? '#737373' : isOver ? '#ef4444' : pct > 80 ? '#f59e0b' : '#10b981';
   const remaining = budget > 0 ? Math.max(budget - spent, 0) : 0;
   const data = budget > 0
     ? [{ value: Math.min(spent, budget) }, { value: remaining }, ...(isOver ? [{ value: spent - budget }] : [])]
@@ -97,13 +89,13 @@ function BudgetGauge({ spent, budget }) {
           stroke="none"
         >
           <Cell fill={color} />
-          <Cell fill={budget > 0 ? '#e5e7eb' : '#e5e7eb'} />
-          {isOver && <Cell fill="#fca5a5" />}
+          <Cell fill="#404040" />
+          {isOver && <Cell fill="#7f1d1d" />}
         </Pie>
       </PieChart>
       <div className="absolute inset-0 flex flex-col items-center justify-center">
         <span className="text-2xl font-black" style={{ color }}>{budget > 0 ? Math.round(pct) : 0}%</span>
-        <span className="text-[9px] text-gray-400 uppercase tracking-widest">usado</span>
+        <span className="text-[9px] text-neutral-500 uppercase tracking-widest">usado</span>
       </div>
     </div>
   );
@@ -118,26 +110,26 @@ const BudgetTooltip = ({ active, payload }) => {
   const spent = d.spent || 0;
   const diff = budget > 0 ? spent - budget : 0;
   return (
-    <div className="bg-gray-900 text-white rounded-xl shadow-2xl px-4 py-3 text-xs border border-gray-700 min-w-[180px]">
-      <p className="font-bold text-sm mb-2 border-b border-gray-700 pb-2">{d.icon} {d.fullName}</p>
+    <div className="bg-black text-white rounded-xl shadow-2xl px-4 py-3 text-xs border border-neutral-700 min-w-[180px]">
+      <p className="font-bold text-sm mb-2 border-b border-neutral-700 pb-2">{d.icon} {d.fullName}</p>
       <div className="space-y-1.5">
         <div className="flex justify-between">
-          <span className="text-gray-400">Gastado</span>
+          <span className="text-neutral-500">Gastado</span>
           <span className="font-bold">{formatCurrency(spent)}</span>
         </div>
         {budget > 0 && (
           <div className="flex justify-between">
-            <span className="text-gray-400">Objetivo</span>
-            <span className="font-bold text-blue-400">{formatCurrency(budget)}</span>
+            <span className="text-neutral-500">Objetivo</span>
+            <span className="font-bold text-neutral-300">{formatCurrency(budget)}</span>
           </div>
         )}
         {budget > 0 && (
-          <div className={`flex justify-between pt-1.5 border-t border-gray-700 ${diff > 0 ? 'text-red-400' : 'text-emerald-400'}`}>
+          <div className={`flex justify-between pt-1.5 border-t border-neutral-700 ${diff > 0 ? 'text-red-400' : 'text-emerald-400'}`}>
             <span>{diff > 0 ? 'Excedido' : 'Disponible'}</span>
             <span className="font-black">{diff > 0 ? '+' : ''}{formatCurrency(Math.abs(diff))}</span>
           </div>
         )}
-        {!budget && <p className="text-gray-500 italic">Sin objetivo definido</p>}
+        {!budget && <p className="text-neutral-600 italic">Sin objetivo definido</p>}
       </div>
     </div>
   );
@@ -252,8 +244,8 @@ export default function Budget() {
       pct,
       withinBudget: budget > 0 ? Math.round(Math.min(spent, budget) * 100) / 100 : spent,
       overBudget: isOver ? Math.round((spent - budget) * 100) / 100 : 0,
-      fill: budget > 0 ? (isOver ? '#ef4444' : pct > 80 ? '#f59e0b' : '#10b981') : '#94a3b8',
-      overFill: isOver ? '#fecaca' : 'transparent',
+      fill: budget > 0 ? (isOver ? '#ef4444' : pct > 80 ? '#f59e0b' : '#10b981') : '#737373',
+      overFill: isOver ? '#7f1d1d' : 'transparent',
     };
   });
 
@@ -301,53 +293,53 @@ export default function Budget() {
   return (
     <div className="space-y-6 max-w-[1400px] mx-auto">
 
-      {/* ════════════ HERO SECTION ════════════ */}
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white p-8">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-blue-500/10 to-transparent rounded-full -translate-y-1/2 translate-x-1/3" />
-        <div className="absolute bottom-0 left-0 w-64 h-64 bg-gradient-to-tr from-emerald-500/10 to-transparent rounded-full translate-y-1/2 -translate-x-1/4" />
+      {/* HERO SECTION */}
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-black via-neutral-900 to-black text-white p-8 border border-neutral-800">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-neutral-700/10 to-transparent rounded-full -translate-y-1/2 translate-x-1/3" />
+        <div className="absolute bottom-0 left-0 w-64 h-64 bg-gradient-to-tr from-neutral-700/10 to-transparent rounded-full translate-y-1/2 -translate-x-1/4" />
 
         <div className="relative flex flex-col lg:flex-row items-center gap-8">
           {/* Left: title + stats */}
           <div className="flex-1 space-y-6">
             <div>
               <div className="flex items-center gap-2 mb-1">
-                <Target size={20} className="text-blue-400" />
-                <span className="text-xs font-semibold uppercase tracking-widest text-blue-400">Control de gastos</span>
+                <Target size={20} className="text-neutral-400" />
+                <span className="text-xs font-semibold uppercase tracking-widest text-neutral-400">Control de gastos</span>
               </div>
               <h2 className="text-3xl font-black tracking-tight">Objetivos de ahorro</h2>
-              <p className="text-sm text-gray-400 mt-1">{filteredPurchases.length} facturas de compra &middot; {dateLabel}</p>
+              <p className="text-sm text-neutral-500 mt-1">{filteredPurchases.length} facturas de compra &middot; {dateLabel}</p>
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
               <div className="bg-white/5 backdrop-blur-sm rounded-xl p-3 border border-white/10">
                 <div className="flex items-center gap-1.5 mb-1">
                   <TrendingUp size={12} className="text-red-400" />
-                  <span className="text-[10px] uppercase tracking-wider text-gray-500">Gastado</span>
+                  <span className="text-[10px] uppercase tracking-wider text-neutral-500">Gastado</span>
                 </div>
                 <p className="text-lg font-black text-red-400">{formatCurrency(totalExpenseAmount)}</p>
               </div>
               <div className="bg-white/5 backdrop-blur-sm rounded-xl p-3 border border-white/10">
                 <div className="flex items-center gap-1.5 mb-1">
-                  <Target size={12} className="text-blue-400" />
-                  <span className="text-[10px] uppercase tracking-wider text-gray-500">Objetivo</span>
+                  <Target size={12} className="text-neutral-400" />
+                  <span className="text-[10px] uppercase tracking-wider text-neutral-500">Objetivo</span>
                 </div>
-                <p className="text-lg font-black text-blue-400">{hasBudgets ? formatCurrency(totalBudget) : '---'}</p>
+                <p className="text-lg font-black text-neutral-300">{hasBudgets ? formatCurrency(totalBudget) : '---'}</p>
               </div>
               <div className="bg-white/5 backdrop-blur-sm rounded-xl p-3 border border-white/10">
                 <div className="flex items-center gap-1.5 mb-1">
                   <ArrowUpRight size={12} className="text-orange-400" />
-                  <span className="text-[10px] uppercase tracking-wider text-gray-500">Excedido</span>
+                  <span className="text-[10px] uppercase tracking-wider text-neutral-500">Excedido</span>
                 </div>
                 <p className="text-lg font-black text-orange-400">{hasBudgets ? formatCurrency(totalOverAmount) : '---'}</p>
-                {overCount > 0 && <p className="text-[10px] text-gray-500 mt-0.5">{overCount} categorias</p>}
+                {overCount > 0 && <p className="text-[10px] text-neutral-600 mt-0.5">{overCount} categorias</p>}
               </div>
               <div className="bg-white/5 backdrop-blur-sm rounded-xl p-3 border border-white/10">
                 <div className="flex items-center gap-1.5 mb-1">
                   <ArrowDownRight size={12} className="text-emerald-400" />
-                  <span className="text-[10px] uppercase tracking-wider text-gray-500">Disponible</span>
+                  <span className="text-[10px] uppercase tracking-wider text-neutral-500">Disponible</span>
                 </div>
                 <p className="text-lg font-black text-emerald-400">{hasBudgets ? formatCurrency(totalSavings) : '---'}</p>
-                {okCount > 0 && <p className="text-[10px] text-gray-500 mt-0.5">{okCount} categorias ok</p>}
+                {okCount > 0 && <p className="text-[10px] text-neutral-600 mt-0.5">{okCount} categorias ok</p>}
               </div>
             </div>
           </div>
@@ -355,22 +347,22 @@ export default function Budget() {
           {/* Right: gauge */}
           <div className="flex flex-col items-center gap-2">
             <BudgetGauge spent={totalExpenseAmount} budget={totalBudget} />
-            <span className="text-[10px] uppercase tracking-widest text-gray-500">
+            <span className="text-[10px] uppercase tracking-widest text-neutral-500">
               {globalPct > 100 ? 'Presupuesto excedido' : globalPct > 80 ? 'Cerca del limite' : 'Dentro del objetivo'}
             </span>
           </div>
         </div>
       </div>
 
-      {/* ════════════ TOOLBAR ════════════ */}
+      {/* TOOLBAR */}
       <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between">
         {/* Date presets */}
-        <div className="flex gap-1.5 flex-wrap items-center bg-white rounded-xl border border-gray-200 p-1.5">
-          <Calendar size={14} className="text-gray-400 ml-1.5" />
+        <div className="flex gap-1.5 flex-wrap items-center bg-neutral-900 rounded-xl border border-neutral-800 p-1.5">
+          <Calendar size={14} className="text-neutral-600 ml-1.5" />
           {presets.map(p => (
             <button key={p.key} onClick={() => handlePreset(p.key)}
               className={`px-2.5 py-1 text-xs font-medium rounded-lg transition-all ${datePreset === p.key
-                ? 'bg-gray-900 text-white shadow-sm' : 'text-gray-500 hover:text-gray-800 hover:bg-gray-50'}`}>
+                ? 'bg-white text-black shadow-sm' : 'text-neutral-500 hover:text-neutral-300 hover:bg-neutral-800'}`}>
               {p.label}
             </button>
           ))}
@@ -379,33 +371,33 @@ export default function Budget() {
         {/* Actions */}
         <div className="flex gap-2 flex-wrap items-center">
           <button onClick={autoSetBudgets}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium bg-gray-900 text-white rounded-lg hover:bg-gray-700 transition-colors shadow-sm">
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium bg-white text-black rounded-lg hover:bg-neutral-200 transition-colors shadow-sm">
             <Sparkles size={12} /> Auto-generar
           </button>
           {hasBudgets && (
             <button onClick={clearBudgets}
-              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium bg-white text-gray-600 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium bg-neutral-900 text-neutral-400 border border-neutral-700 rounded-lg hover:bg-neutral-800 transition-colors">
               <RotateCcw size={12} /> Restaurar
             </button>
           )}
         </div>
       </div>
 
-      {/* Custom date inputs (only when custom selected) */}
+      {/* Custom date inputs */}
       {datePreset === 'custom' && (
-        <div className="flex items-center gap-4 bg-white rounded-xl border border-gray-200 p-3">
+        <div className="flex items-center gap-4 bg-neutral-900 rounded-xl border border-neutral-800 p-3">
           <div className="flex items-center gap-2">
-            <label className="text-xs text-gray-500 font-medium">Desde</label>
+            <label className="text-xs text-neutral-500 font-medium">Desde</label>
             <input type="date" value={customFrom} onChange={e => { setCustomFrom(e.target.value); setDatePreset('custom'); setExpandedCategory(null); }}
-              className="px-2.5 py-1.5 text-xs border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900/20 focus:border-gray-400" />
+              className="px-2.5 py-1.5 text-xs bg-neutral-800 border border-neutral-700 rounded-lg text-neutral-200 focus:outline-none focus:ring-2 focus:ring-neutral-500 focus:border-transparent" />
           </div>
           <div className="flex items-center gap-2">
-            <label className="text-xs text-gray-500 font-medium">Hasta</label>
+            <label className="text-xs text-neutral-500 font-medium">Hasta</label>
             <input type="date" value={customTo} onChange={e => { setCustomTo(e.target.value); setDatePreset('custom'); setExpandedCategory(null); }}
-              className="px-2.5 py-1.5 text-xs border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900/20 focus:border-gray-400" />
+              className="px-2.5 py-1.5 text-xs bg-neutral-800 border border-neutral-700 rounded-lg text-neutral-200 focus:outline-none focus:ring-2 focus:ring-neutral-500 focus:border-transparent" />
           </div>
           {datePreset !== 'all' && (
-            <span className="text-xs bg-gray-100 text-gray-600 px-2.5 py-1 rounded-full font-medium">
+            <span className="text-xs bg-neutral-800 text-neutral-400 px-2.5 py-1 rounded-full font-medium">
               {filteredPurchases.length} de {purchaseData.length} facturas
             </span>
           )}
@@ -413,43 +405,40 @@ export default function Budget() {
       )}
 
       {sortedCategories.length === 0 ? (
-        <div className="bg-white rounded-2xl border border-gray-200 p-16 text-center">
-          <Gauge size={48} className="mx-auto text-gray-200 mb-4" />
-          <p className="text-gray-400 font-medium">No hay gastos en el rango seleccionado</p>
+        <div className="bg-neutral-900 rounded-2xl border border-neutral-800 p-16 text-center">
+          <Gauge size={48} className="mx-auto text-neutral-700 mb-4" />
+          <p className="text-neutral-500 font-medium">No hay gastos en el rango seleccionado</p>
         </div>
       ) : (
         <>
-          {/* ════════════ BAR CHART ════════════ */}
-          <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
-            <div className="px-6 pt-5 pb-2 border-b border-gray-100">
-              <h3 className="text-sm font-bold text-gray-800">Gasto real vs Objetivo</h3>
+          {/* BAR CHART */}
+          <div className="bg-neutral-900 rounded-2xl border border-neutral-800 shadow-sm overflow-hidden">
+            <div className="px-6 pt-5 pb-2 border-b border-neutral-800">
+              <h3 className="text-sm font-bold text-neutral-200">Gasto real vs Objetivo</h3>
               <div className="flex gap-4 mt-2">
-                <span className="flex items-center gap-1.5 text-[11px] text-gray-500">
+                <span className="flex items-center gap-1.5 text-[11px] text-neutral-500">
                   <span className="w-2.5 h-2.5 rounded-sm bg-emerald-500" /> Dentro
                 </span>
-                <span className="flex items-center gap-1.5 text-[11px] text-gray-500">
+                <span className="flex items-center gap-1.5 text-[11px] text-neutral-500">
                   <span className="w-2.5 h-2.5 rounded-sm bg-amber-500" /> Alerta
                 </span>
-                <span className="flex items-center gap-1.5 text-[11px] text-gray-500">
+                <span className="flex items-center gap-1.5 text-[11px] text-neutral-500">
                   <span className="w-2.5 h-2.5 rounded-sm bg-red-500" /> Excedido
                 </span>
-                <span className="flex items-center gap-1.5 text-[11px] text-gray-500">
-                  <span className="w-2.5 h-2.5 rounded-sm bg-gray-400" /> Sin objetivo
-                </span>
-                <span className="flex items-center gap-1.5 text-[11px] text-gray-500">
-                  <span className="w-4 h-0.5 bg-blue-500 rounded" /> Objetivo
+                <span className="flex items-center gap-1.5 text-[11px] text-neutral-500">
+                  <span className="w-2.5 h-2.5 rounded-sm bg-neutral-500" /> Sin objetivo
                 </span>
               </div>
             </div>
             <div className="px-4 py-4">
               <ResponsiveContainer width="100%" height={Math.max(chartData.length * 56, 220)}>
                 <BarChart data={chartData} layout="vertical" margin={{ left: 0, right: 80, top: 8, bottom: 8 }} barSize={24} barGap={8}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#f3f4f6" horizontal={false} />
-                  <XAxis type="number" tick={{ fontSize: 10, fill: '#9ca3af' }} tickFormatter={(v) => v >= 1000 ? `${(v / 1000).toFixed(0)}k` : v}
-                    axisLine={{ stroke: '#e5e7eb' }} tickLine={false} />
-                  <YAxis type="category" dataKey="name" width={150} tick={{ fontSize: 11, fill: '#374151', fontWeight: 500 }}
+                  <CartesianGrid strokeDasharray="3 3" stroke="#262626" horizontal={false} />
+                  <XAxis type="number" tick={{ fontSize: 10, fill: '#a3a3a3' }} tickFormatter={(v) => v >= 1000 ? `${(v / 1000).toFixed(0)}k` : v}
+                    axisLine={{ stroke: '#404040' }} tickLine={false} />
+                  <YAxis type="category" dataKey="name" width={150} tick={{ fontSize: 11, fill: '#d4d4d4', fontWeight: 500 }}
                     axisLine={false} tickLine={false} />
-                  <ReTooltip content={<BudgetTooltip />} cursor={{ fill: 'rgba(0,0,0,0.03)' }} />
+                  <ReTooltip content={<BudgetTooltip />} cursor={{ fill: 'rgba(255,255,255,0.03)' }} />
                   <Bar dataKey="withinBudget" stackId="a" radius={[0, 0, 0, 0]} animationDuration={800}>
                     {chartData.map((d, i) => <Cell key={i} fill={d.fill} />)}
                   </Bar>
@@ -459,28 +448,19 @@ export default function Budget() {
                       dataKey="spent"
                       position="right"
                       formatter={(v) => v >= 1000 ? `${(v / 1000).toFixed(1)}k €` : `${v} €`}
-                      style={{ fontSize: 10, fill: '#6b7280', fontWeight: 700 }}
+                      style={{ fontSize: 10, fill: '#a3a3a3', fontWeight: 700 }}
                     />
                   </Bar>
-                  {/* Budget reference markers as vertical lines */}
-                  {chartData.filter(d => d.budget > 0).map((d, i) => {
-                    const maxSpent = Math.max(...chartData.map(c => c.spent));
-                    // Show line if budget is within visible range
-                    if (d.budget <= maxSpent * 1.5) {
-                      return null; // We'll use custom reference below
-                    }
-                    return null;
-                  })}
                 </BarChart>
               </ResponsiveContainer>
             </div>
           </div>
 
-          {/* ════════════ CATEGORY CARDS ════════════ */}
+          {/* CATEGORY CARDS */}
           <div className="space-y-3">
             <div className="flex items-center justify-between px-1">
-              <h3 className="text-sm font-bold text-gray-800">Detalle por categoria</h3>
-              <p className="text-[11px] text-gray-400">Clic en una categoria para ver el desglose completo</p>
+              <h3 className="text-sm font-bold text-neutral-200">Detalle por categoria</h3>
+              <p className="text-[11px] text-neutral-500">Clic en una categoria para ver el desglose completo</p>
             </div>
 
             {sortedCategories.map(([prefix, cat]) => {
@@ -493,11 +473,11 @@ export default function Budget() {
               const isEditing = editingBudget === prefix;
               const isExpanded = expandedCategory === prefix;
 
-              let statusStyle = { ring: 'ring-gray-200', bg: 'bg-white', barColor: '#94a3b8', badgeBg: 'bg-gray-100', badgeText: 'text-gray-600' };
+              let statusStyle = { ring: 'ring-neutral-800', bg: 'bg-neutral-900', barColor: '#737373', badgeBg: 'bg-neutral-800', badgeText: 'text-neutral-400' };
               if (budget > 0) {
-                if (isOver) statusStyle = { ring: 'ring-red-200', bg: 'bg-white', barColor: '#ef4444', badgeBg: 'bg-red-50', badgeText: 'text-red-700' };
-                else if (pctBudget > 80) statusStyle = { ring: 'ring-amber-200', bg: 'bg-white', barColor: '#f59e0b', badgeBg: 'bg-amber-50', badgeText: 'text-amber-700' };
-                else statusStyle = { ring: 'ring-emerald-200', bg: 'bg-white', barColor: '#10b981', badgeBg: 'bg-emerald-50', badgeText: 'text-emerald-700' };
+                if (isOver) statusStyle = { ring: 'ring-red-900/50', bg: 'bg-neutral-900', barColor: '#ef4444', badgeBg: 'bg-red-950/40', badgeText: 'text-red-400' };
+                else if (pctBudget > 80) statusStyle = { ring: 'ring-amber-900/50', bg: 'bg-neutral-900', barColor: '#f59e0b', badgeBg: 'bg-amber-950/40', badgeText: 'text-amber-400' };
+                else statusStyle = { ring: 'ring-emerald-900/50', bg: 'bg-neutral-900', barColor: '#10b981', badgeBg: 'bg-emerald-950/40', badgeText: 'text-emerald-400' };
               }
 
               return (
@@ -505,53 +485,48 @@ export default function Budget() {
                   <div className="p-5">
                     {/* Top row */}
                     <div className="flex items-start gap-4">
-                      {/* Left: icon + name + expand */}
                       <button onClick={() => setExpandedCategory(isExpanded ? null : prefix)}
                         className="flex items-center gap-3 group min-w-0 flex-shrink">
-                        <div className="w-10 h-10 rounded-xl flex items-center justify-center text-lg bg-gray-50 ring-1 ring-gray-200 group-hover:ring-gray-300 transition-all">
+                        <div className="w-10 h-10 rounded-xl flex items-center justify-center text-lg bg-neutral-800 ring-1 ring-neutral-700 group-hover:ring-neutral-600 transition-all">
                           {cat.icon}
                         </div>
                         <div className="text-left min-w-0">
                           <div className="flex items-center gap-1.5">
-                            <span className="text-sm font-bold text-gray-800 truncate">{cat.name}</span>
-                            {isExpanded ? <ChevronDown size={13} className="text-gray-400 shrink-0" /> : <ChevronRight size={13} className="text-gray-400 shrink-0" />}
+                            <span className="text-sm font-bold text-neutral-200 truncate">{cat.name}</span>
+                            {isExpanded ? <ChevronDown size={13} className="text-neutral-500 shrink-0" /> : <ChevronRight size={13} className="text-neutral-500 shrink-0" />}
                           </div>
-                          <span className="text-[11px] text-gray-400">{cat.count} items &middot; {pctOfTotal.toFixed(1)}% del total</span>
+                          <span className="text-[11px] text-neutral-500">{cat.count} items &middot; {pctOfTotal.toFixed(1)}% del total</span>
                         </div>
                       </button>
 
                       <div className="flex-1" />
 
-                      {/* Center: amounts */}
                       <div className="flex items-center gap-6 flex-wrap">
-                        {/* Spent */}
                         <div className="text-right">
-                          <p className="text-[10px] uppercase tracking-wider text-gray-400 mb-0.5">Gastado</p>
+                          <p className="text-[10px] uppercase tracking-wider text-neutral-500 mb-0.5">Gastado</p>
                           <p className="text-base font-black tabular-nums" style={{ color: statusStyle.barColor }}>{formatCurrency(cat.total)}</p>
                         </div>
 
-                        {/* Objective */}
                         <div className="text-right min-w-[100px]">
-                          <p className="text-[10px] uppercase tracking-wider text-gray-400 mb-0.5">Objetivo</p>
+                          <p className="text-[10px] uppercase tracking-wider text-neutral-500 mb-0.5">Objetivo</p>
                           {isEditing ? (
                             <div className="flex items-center gap-1.5 justify-end">
                               <input type="number" value={editValue} onChange={e => setEditValue(e.target.value)}
                                 onKeyDown={e => { if (e.key === 'Enter') saveBudget(prefix, editValue); if (e.key === 'Escape') setEditingBudget(null); }}
                                 autoFocus
-                                className="w-24 px-2 py-1 text-xs border border-blue-300 rounded-lg text-right focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 bg-blue-50/50" />
-                              <button onClick={() => saveBudget(prefix, editValue)} className="p-1 text-blue-600 hover:bg-blue-50 rounded-md"><Save size={13} /></button>
-                              <button onClick={() => setEditingBudget(null)} className="p-1 text-gray-400 hover:bg-gray-50 rounded-md"><X size={13} /></button>
+                                className="w-24 px-2 py-1 text-xs border border-neutral-600 rounded-lg text-right focus:outline-none focus:ring-2 focus:ring-neutral-500 focus:border-neutral-500 bg-neutral-800 text-neutral-200" />
+                              <button onClick={() => saveBudget(prefix, editValue)} className="p-1 text-neutral-300 hover:bg-neutral-800 rounded-md"><Save size={13} /></button>
+                              <button onClick={() => setEditingBudget(null)} className="p-1 text-neutral-500 hover:bg-neutral-800 rounded-md"><X size={13} /></button>
                             </div>
                           ) : (
                             <button onClick={() => { setEditingBudget(prefix); setEditValue(budget > 0 ? String(budget) : ''); }}
-                              className="group/edit flex items-center gap-1.5 text-base font-black tabular-nums text-blue-600 hover:text-blue-700 transition-colors">
-                              {budget > 0 ? formatCurrency(budget) : <span className="text-gray-300 text-sm font-medium">Definir</span>}
-                              <Pencil size={11} className="opacity-0 group-hover/edit:opacity-100 transition-opacity text-blue-400" />
+                              className="group/edit flex items-center gap-1.5 text-base font-black tabular-nums text-neutral-300 hover:text-white transition-colors">
+                              {budget > 0 ? formatCurrency(budget) : <span className="text-neutral-600 text-sm font-medium">Definir</span>}
+                              <Pencil size={11} className="opacity-0 group-hover/edit:opacity-100 transition-opacity text-neutral-500" />
                             </button>
                           )}
                         </div>
 
-                        {/* Status badge */}
                         <div className="min-w-[110px] text-right">
                           {budget > 0 ? (
                             isOver ? (
@@ -574,23 +549,23 @@ export default function Budget() {
                     <div className="mt-4">
                       {budget > 0 ? (
                         <div>
-                          <div className="relative w-full h-2.5 bg-gray-100 rounded-full overflow-visible">
+                          <div className="relative w-full h-2.5 bg-neutral-800 rounded-full overflow-visible">
                             <div className="absolute top-0 left-0 h-2.5 rounded-full transition-all duration-700 ease-out"
                               style={{ width: `${Math.min(pctBudget, 100)}%`, backgroundColor: statusStyle.barColor }} />
                             {isOver && (
-                              <div className="absolute top-0 left-full h-2.5 bg-red-200 rounded-r-full"
+                              <div className="absolute top-0 left-full h-2.5 bg-red-900/50 rounded-r-full"
                                 style={{ width: `${Math.min((pctBudget - 100) * 0.5, 20)}%` }} />
                             )}
                           </div>
                           <div className="flex justify-between mt-1.5">
                             <span className="text-[10px] font-medium" style={{ color: statusStyle.barColor }}>{Math.round(pctBudget)}% del objetivo</span>
-                            <span className="text-[10px] text-gray-400">{formatCurrency(budget)}</span>
+                            <span className="text-[10px] text-neutral-500">{formatCurrency(budget)}</span>
                           </div>
                         </div>
                       ) : (
                         <div>
-                          <div className="w-full h-1.5 bg-gray-100 rounded-full">
-                            <div className="h-1.5 rounded-full bg-gray-300 transition-all duration-700" style={{ width: `${Math.max(pctOfTotal, 0.5)}%` }} />
+                          <div className="w-full h-1.5 bg-neutral-800 rounded-full">
+                            <div className="h-1.5 rounded-full bg-neutral-600 transition-all duration-700" style={{ width: `${Math.max(pctOfTotal, 0.5)}%` }} />
                           </div>
                         </div>
                       )}
@@ -602,18 +577,18 @@ export default function Budget() {
                     const groups = getExpandedDetails(prefix);
                     const groupTotal = groups.reduce((s, g) => s + g.total, 0);
                     return (
-                      <div className="border-t border-gray-200 bg-gradient-to-b from-gray-50/80 to-white">
+                      <div className="border-t border-neutral-800 bg-black/30">
                         {/* Sub-account summary strip */}
-                        <div className="px-5 py-3 flex items-center gap-3 border-b border-gray-100 bg-white/60 backdrop-blur-sm">
-                          <span className="text-[10px] uppercase tracking-widest text-gray-400 font-semibold">Subcuentas</span>
+                        <div className="px-5 py-3 flex items-center gap-3 border-b border-neutral-800 bg-neutral-900/60 backdrop-blur-sm">
+                          <span className="text-[10px] uppercase tracking-widest text-neutral-500 font-semibold">Subcuentas</span>
                           <div className="flex-1 flex gap-2 flex-wrap">
                             {groups.map((g) => {
                               const gPct = groupTotal > 0 ? (g.total / groupTotal) * 100 : 0;
                               return (
-                                <span key={g.account} className="inline-flex items-center gap-1.5 text-[10px] bg-gray-100 text-gray-600 pl-1 pr-2 py-0.5 rounded-full">
+                                <span key={g.account} className="inline-flex items-center gap-1.5 text-[10px] bg-neutral-800 text-neutral-400 pl-1 pr-2 py-0.5 rounded-full">
                                   <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: statusStyle.barColor }} />
                                   {g.account.length > 22 ? g.account.substring(0, 22) + '...' : g.account}
-                                  <span className="font-bold text-gray-800">{Math.round(gPct)}%</span>
+                                  <span className="font-bold text-neutral-200">{Math.round(gPct)}%</span>
                                 </span>
                               );
                             })}
@@ -621,59 +596,53 @@ export default function Budget() {
                         </div>
 
                         {groups.map((group, gi) => (
-                          <div key={group.account} className={gi < groups.length - 1 ? 'border-b border-gray-100' : ''}>
-                            {/* Sub-account header */}
-                            <div className="flex items-center justify-between px-5 py-3 bg-white sticky top-0 z-10">
+                          <div key={group.account} className={gi < groups.length - 1 ? 'border-b border-neutral-800' : ''}>
+                            <div className="flex items-center justify-between px-5 py-3 bg-neutral-900/50 sticky top-0 z-10">
                               <div className="flex items-center gap-2.5">
                                 <div className="w-6 h-6 rounded-lg flex items-center justify-center text-[10px] font-black text-white"
                                   style={{ backgroundColor: statusStyle.barColor }}>
                                   {gi + 1}
                                 </div>
                                 <div>
-                                  <p className="text-xs font-bold text-gray-800">{group.account}</p>
-                                  <p className="text-[10px] text-gray-400">{group.accountNum} &middot; {group.items.length} movimientos</p>
+                                  <p className="text-xs font-bold text-neutral-200">{group.account}</p>
+                                  <p className="text-[10px] text-neutral-500">{group.accountNum} &middot; {group.items.length} movimientos</p>
                                 </div>
                               </div>
                               <div className="text-right">
-                                <p className="text-sm font-black text-gray-900 tabular-nums">{formatCurrency(group.total)}</p>
-                                <p className="text-[10px] text-gray-400">{groupTotal > 0 ? ((group.total / groupTotal) * 100).toFixed(1) : 0}% de la categoria</p>
+                                <p className="text-sm font-black text-neutral-100 tabular-nums">{formatCurrency(group.total)}</p>
+                                <p className="text-[10px] text-neutral-500">{groupTotal > 0 ? ((group.total / groupTotal) * 100).toFixed(1) : 0}% de la categoria</p>
                               </div>
                             </div>
 
-                            {/* Items table */}
-                            <div className="mx-5 mb-4 rounded-xl border border-gray-100 overflow-hidden">
-                              {/* Table header */}
-                              <div className="grid grid-cols-[72px_1fr_1fr_90px_100px] bg-gray-50 px-4 py-2 text-[10px] uppercase tracking-wider text-gray-400 font-semibold border-b border-gray-100">
+                            <div className="mx-5 mb-4 rounded-xl border border-neutral-800 overflow-hidden">
+                              <div className="grid grid-cols-[72px_1fr_1fr_90px_100px] bg-neutral-800 px-4 py-2 text-[10px] uppercase tracking-wider text-neutral-500 font-semibold border-b border-neutral-700">
                                 <span>Fecha</span>
                                 <span>Proveedor</span>
                                 <span>Concepto</span>
                                 <span className="text-right">N. Doc</span>
                                 <span className="text-right">Importe</span>
                               </div>
-                              {/* Table rows */}
                               {group.items.sort((a, b) => (b.date || 0) - (a.date || 0)).map((item, j) => {
                                 const itemPct = group.total > 0 ? (item.amount / group.total) * 100 : 0;
                                 return (
-                                  <div key={j} className="group relative grid grid-cols-[72px_1fr_1fr_90px_100px] items-center px-4 py-2.5 text-xs border-b border-gray-50 last:border-0 hover:bg-blue-50/40 transition-colors">
-                                    {/* Background bar showing proportion */}
-                                    <div className="absolute inset-y-0 left-0 opacity-[0.04] transition-opacity group-hover:opacity-[0.08]"
+                                  <div key={j} className="group relative grid grid-cols-[72px_1fr_1fr_90px_100px] items-center px-4 py-2.5 text-xs border-b border-neutral-800/50 last:border-0 hover:bg-neutral-800/40 transition-colors">
+                                    <div className="absolute inset-y-0 left-0 opacity-[0.06] transition-opacity group-hover:opacity-[0.12]"
                                       style={{ width: `${itemPct}%`, backgroundColor: statusStyle.barColor }} />
 
-                                    <span className="relative text-gray-400 tabular-nums font-medium">{formatDate(item.date)}</span>
-                                    <span className="relative truncate text-gray-800 font-semibold pr-2" title={item.contact}>{item.contact}</span>
-                                    <span className="relative truncate text-gray-500 pr-2" title={item.desc}>{item.desc || '—'}</span>
-                                    <span className="relative text-gray-400 truncate text-right font-mono text-[11px]" title={item.docNumber}>{item.docNumber}</span>
-                                    <span className="relative text-right font-black text-gray-900 tabular-nums">{formatCurrency(item.amount)}</span>
+                                    <span className="relative text-neutral-500 tabular-nums font-medium">{formatDate(item.date)}</span>
+                                    <span className="relative truncate text-neutral-200 font-semibold pr-2" title={item.contact}>{item.contact}</span>
+                                    <span className="relative truncate text-neutral-500 pr-2" title={item.desc}>{item.desc || '—'}</span>
+                                    <span className="relative text-neutral-500 truncate text-right font-mono text-[11px]" title={item.docNumber}>{item.docNumber}</span>
+                                    <span className="relative text-right font-black text-neutral-100 tabular-nums">{formatCurrency(item.amount)}</span>
                                   </div>
                                 );
                               })}
-                              {/* Sub-account total row */}
-                              <div className="grid grid-cols-[72px_1fr_1fr_90px_100px] items-center px-4 py-2.5 bg-gray-50 border-t border-gray-200">
+                              <div className="grid grid-cols-[72px_1fr_1fr_90px_100px] items-center px-4 py-2.5 bg-neutral-800 border-t border-neutral-700">
                                 <span />
-                                <span className="text-[10px] uppercase tracking-wider text-gray-400 font-semibold">{group.items.length} registros</span>
+                                <span className="text-[10px] uppercase tracking-wider text-neutral-500 font-semibold">{group.items.length} registros</span>
                                 <span />
-                                <span className="text-[10px] text-right uppercase tracking-wider text-gray-400 font-semibold">Total</span>
-                                <span className="text-right text-xs font-black text-gray-900 tabular-nums">{formatCurrency(group.total)}</span>
+                                <span className="text-[10px] text-right uppercase tracking-wider text-neutral-500 font-semibold">Total</span>
+                                <span className="text-right text-xs font-black text-neutral-100 tabular-nums">{formatCurrency(group.total)}</span>
                               </div>
                             </div>
                           </div>

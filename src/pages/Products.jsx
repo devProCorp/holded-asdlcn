@@ -16,7 +16,7 @@ const productColumns = [
     render: (row) => {
       const stock = Number(row.stock) || 0;
       return (
-        <span className={stock <= 0 ? 'text-red-600 font-medium' : stock < 10 ? 'text-orange-600 font-medium' : ''}>
+        <span className={stock <= 0 ? 'text-red-400 font-medium' : stock < 10 ? 'text-orange-400 font-medium' : ''}>
           {stock}
         </span>
       );
@@ -46,16 +46,16 @@ export default function Products() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-bold">Productos y servicios</h2>
-        <div className="flex border border-gray-200 rounded-lg overflow-hidden">
+        <div className="flex border border-neutral-700 rounded-lg overflow-hidden">
           <button
             onClick={() => setTab('products')}
-            className={`px-4 py-2 text-sm font-medium ${tab === 'products' ? 'bg-blue-600 text-white' : 'bg-white text-gray-600 hover:bg-gray-50'}`}
+            className={`px-4 py-2 text-sm font-medium ${tab === 'products' ? 'bg-white text-black' : 'bg-neutral-900 text-neutral-400 hover:bg-neutral-800'}`}
           >
             Productos ({products.data?.length || 0})
           </button>
           <button
             onClick={() => setTab('services')}
-            className={`px-4 py-2 text-sm font-medium ${tab === 'services' ? 'bg-blue-600 text-white' : 'bg-white text-gray-600 hover:bg-gray-50'}`}
+            className={`px-4 py-2 text-sm font-medium ${tab === 'services' ? 'bg-white text-black' : 'bg-neutral-900 text-neutral-400 hover:bg-neutral-800'}`}
           >
             Servicios ({services.data?.length || 0})
           </button>
@@ -72,7 +72,7 @@ export default function Products() {
             searchKeys={['name', 'sku', 'barcode']}
           />
         ) : (
-          <div className="bg-white rounded-xl border border-gray-200 p-10 text-center text-gray-400">
+          <div className="bg-neutral-900 rounded-xl border border-neutral-800 p-10 text-center text-neutral-500">
             No hay {tab === 'products' ? 'productos' : 'servicios'} registrados
           </div>
         )

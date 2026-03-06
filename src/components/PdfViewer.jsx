@@ -48,28 +48,28 @@ export default function PdfViewer({ docType, documentId, docNumber, onClose }) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60" onClick={onClose}>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80" onClick={onClose}>
       <div
-        className="bg-white rounded-xl shadow-2xl w-[90vw] h-[90vh] max-w-5xl flex flex-col"
+        className="bg-neutral-900 rounded-xl shadow-2xl w-[90vw] h-[90vh] max-w-5xl flex flex-col border border-neutral-800"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-5 py-3 border-b border-gray-200">
+        <div className="flex items-center justify-between px-5 py-3 border-b border-neutral-800">
           <div className="flex items-center gap-2">
-            <FileText size={18} className="text-blue-600" />
-            <span className="font-medium">{docNumber || 'Documento'}</span>
+            <FileText size={18} className="text-neutral-400" />
+            <span className="font-medium text-neutral-200">{docNumber || 'Documento'}</span>
           </div>
           <div className="flex items-center gap-2">
             {pdfData && (
               <button
                 onClick={handleDownload}
-                className="flex items-center gap-2 px-3 py-1.5 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                className="flex items-center gap-2 px-3 py-1.5 text-sm bg-neutral-700 text-white rounded-lg hover:bg-neutral-600 transition-colors"
               >
                 <Download size={14} />
                 Descargar
               </button>
             )}
-            <button onClick={onClose} className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors">
+            <button onClick={onClose} className="p-1.5 hover:bg-neutral-800 rounded-lg transition-colors text-neutral-500">
               <X size={18} />
             </button>
           </div>
@@ -79,12 +79,12 @@ export default function PdfViewer({ docType, documentId, docNumber, onClose }) {
         <div className="flex-1 overflow-hidden">
           {loading && (
             <div className="flex flex-col items-center justify-center h-full">
-              <Loader2 size={32} className="animate-spin text-blue-500" />
-              <p className="text-sm text-gray-500 mt-3">Cargando PDF...</p>
+              <Loader2 size={32} className="animate-spin text-neutral-400" />
+              <p className="text-sm text-neutral-500 mt-3">Cargando PDF...</p>
             </div>
           )}
           {error && (
-            <div className="flex flex-col items-center justify-center h-full text-red-500">
+            <div className="flex flex-col items-center justify-center h-full text-red-400">
               <p className="font-medium">Error al cargar el PDF</p>
               <p className="text-sm mt-1">{error}</p>
             </div>

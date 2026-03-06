@@ -15,15 +15,15 @@ const columns = [
     render: (row) => {
       const types = { client: 'Cliente', supplier: 'Proveedor', creditor: 'Acreedor', debtor: 'Deudor' };
       const colors = {
-        client: 'bg-blue-100 text-blue-700',
-        supplier: 'bg-purple-100 text-purple-700',
-        creditor: 'bg-orange-100 text-orange-700',
-        debtor: 'bg-red-100 text-red-700',
+        client: 'bg-blue-950/40 text-blue-400',
+        supplier: 'bg-purple-950/40 text-purple-400',
+        creditor: 'bg-orange-950/40 text-orange-400',
+        debtor: 'bg-red-950/40 text-red-400',
       };
       const type = row.type || '';
-      if (!type) return <span className="text-gray-400">-</span>;
+      if (!type) return <span className="text-neutral-600">-</span>;
       return (
-        <span className={`inline-block px-2 py-0.5 rounded-full text-xs font-medium ${colors[type] || 'bg-gray-100 text-gray-700'}`}>
+        <span className={`inline-block px-2 py-0.5 rounded-full text-xs font-medium ${colors[type] || 'bg-neutral-800 text-neutral-400'}`}>
           {types[type] || type}
         </span>
       );
@@ -43,7 +43,7 @@ const columns = [
       const parts = [];
       if (row.clientRecord?.num) parts.push(`C: ${row.clientRecord.num}`);
       if (row.supplierRecord?.num) parts.push(`P: ${row.supplierRecord.num}`);
-      return parts.length > 0 ? <span className="text-xs text-gray-500">{parts.join(' | ')}</span> : '-';
+      return parts.length > 0 ? <span className="text-xs text-neutral-500">{parts.join(' | ')}</span> : '-';
     },
   },
 ];
@@ -63,10 +63,10 @@ export default function Contacts() {
     <div className="space-y-6">
       <div className="flex items-center justify-between flex-wrap gap-4">
         <h2 className="text-2xl font-bold">Contactos</h2>
-        <div className="flex gap-4 text-sm text-gray-500">
+        <div className="flex gap-4 text-sm text-neutral-500">
           <span>{contacts.length} total</span>
-          {clients > 0 && <span className="text-blue-600">{clients} clientes</span>}
-          {suppliers > 0 && <span className="text-purple-600">{suppliers} proveedores</span>}
+          {clients > 0 && <span className="text-blue-400">{clients} clientes</span>}
+          {suppliers > 0 && <span className="text-purple-400">{suppliers} proveedores</span>}
           {other > 0 && <span>{other} otros</span>}
         </div>
       </div>

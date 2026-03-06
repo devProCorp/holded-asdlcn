@@ -65,14 +65,14 @@ export default function Expenses() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-bold">Cuentas de gastos</h2>
-        <span className="text-sm text-gray-500">{accounts.length} cuentas</span>
+        <span className="text-sm text-neutral-500">{accounts.length} cuentas</span>
       </div>
 
       {/* Summary by group */}
       <div className="flex gap-2 flex-wrap">
         {Object.entries(groups).sort(([a], [b]) => a.localeCompare(b)).map(([prefix, { label, count }]) => (
-          <div key={prefix} className="bg-white border border-gray-200 rounded-lg px-3 py-1.5 text-xs">
-            <span className="text-gray-500">{label}:</span> <span className="font-medium">{count}</span>
+          <div key={prefix} className="bg-neutral-900 border border-neutral-800 rounded-lg px-3 py-1.5 text-xs">
+            <span className="text-neutral-500">{label}:</span> <span className="font-medium">{count}</span>
           </div>
         ))}
       </div>

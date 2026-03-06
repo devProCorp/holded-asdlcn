@@ -46,17 +46,17 @@ export default function DataTable({ columns, data, searchKeys = [], pageSize = 1
   };
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200">
+    <div className="bg-neutral-900 rounded-xl border border-neutral-800">
       {searchKeys.length > 0 && (
-        <div className="p-4 border-b border-gray-200">
+        <div className="p-4 border-b border-neutral-800">
           <div className="relative">
-            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-600" />
             <input
               type="text"
               placeholder="Buscar..."
               value={search}
               onChange={(e) => { setSearch(e.target.value); setPage(0); }}
-              className="w-full pl-9 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full pl-9 pr-4 py-2 bg-neutral-800 border border-neutral-700 rounded-lg text-sm text-neutral-200 placeholder-neutral-600 focus:outline-none focus:ring-2 focus:ring-neutral-500 focus:border-transparent"
             />
           </div>
         </div>
@@ -64,11 +64,11 @@ export default function DataTable({ columns, data, searchKeys = [], pageSize = 1
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-gray-200">
+            <tr className="border-b border-neutral-800">
               {columns.map((col) => (
                 <th
                   key={col.key || col.label}
-                  className={`px-4 py-3 text-left font-medium text-gray-500 ${col.sortable ? 'cursor-pointer select-none hover:text-gray-700' : ''}`}
+                  className={`px-4 py-3 text-left font-medium text-neutral-500 ${col.sortable ? 'cursor-pointer select-none hover:text-neutral-300' : ''}`}
                   onClick={() => col.sortable && handleSort(col.key)}
                 >
                   <span className="flex items-center gap-1">
@@ -84,13 +84,13 @@ export default function DataTable({ columns, data, searchKeys = [], pageSize = 1
           <tbody>
             {paged.length === 0 ? (
               <tr>
-                <td colSpan={columns.length} className="px-4 py-8 text-center text-gray-400">
+                <td colSpan={columns.length} className="px-4 py-8 text-center text-neutral-600">
                   No se encontraron resultados
                 </td>
               </tr>
             ) : (
               paged.map((row, i) => (
-                <tr key={row.id || row._id || i} className="border-b border-gray-100 hover:bg-gray-50">
+                <tr key={row.id || row._id || i} className="border-b border-neutral-800/50 hover:bg-neutral-800/40">
                   {columns.map((col) => (
                     <td key={col.key || col.label} className="px-4 py-3">
                       {col.render ? col.render(row) : col.key?.split('.').reduce((o, k) => o?.[k], row) ?? '-'}
@@ -103,22 +103,22 @@ export default function DataTable({ columns, data, searchKeys = [], pageSize = 1
         </table>
       </div>
       {totalPages > 1 && (
-        <div className="flex items-center justify-between px-4 py-3 border-t border-gray-200">
-          <span className="text-xs text-gray-500">
+        <div className="flex items-center justify-between px-4 py-3 border-t border-neutral-800">
+          <span className="text-xs text-neutral-500">
             {sorted.length} resultados - Pagina {page + 1} de {totalPages}
           </span>
           <div className="flex gap-2">
             <button
               onClick={() => setPage(Math.max(0, page - 1))}
               disabled={page === 0}
-              className="px-3 py-1 text-xs border border-gray-200 rounded-md disabled:opacity-40 hover:bg-gray-50"
+              className="px-3 py-1 text-xs border border-neutral-700 rounded-md text-neutral-400 disabled:opacity-40 hover:bg-neutral-800"
             >
               Anterior
             </button>
             <button
               onClick={() => setPage(Math.min(totalPages - 1, page + 1))}
               disabled={page >= totalPages - 1}
-              className="px-3 py-1 text-xs border border-gray-200 rounded-md disabled:opacity-40 hover:bg-gray-50"
+              className="px-3 py-1 text-xs border border-neutral-700 rounded-md text-neutral-400 disabled:opacity-40 hover:bg-neutral-800"
             >
               Siguiente
             </button>

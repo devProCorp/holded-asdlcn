@@ -32,7 +32,7 @@ const columns = [
     sortable: true,
     render: (row) => {
       const amount = Number(row.amount) || 0;
-      return <span className={`font-medium ${amount >= 0 ? 'text-green-600' : 'text-red-600'}`}>{formatCurrency(amount)}</span>;
+      return <span className={`font-medium ${amount >= 0 ? 'text-green-400' : 'text-red-400'}`}>{formatCurrency(amount)}</span>;
     },
   },
   {
@@ -70,9 +70,9 @@ export default function Payments() {
       <div className="flex items-center justify-between flex-wrap gap-4">
         <h2 className="text-2xl font-bold">Pagos</h2>
         <div className="flex gap-6 text-sm">
-          <span className="text-green-600 font-medium">Ingresos: {formatCurrency(totalIncome)}</span>
-          <span className="text-red-600 font-medium">Gastos: {formatCurrency(totalExpense)}</span>
-          <span className="text-gray-500 font-medium">Neto: {formatCurrency(totalIncome - totalExpense)}</span>
+          <span className="text-green-400 font-medium">Ingresos: {formatCurrency(totalIncome)}</span>
+          <span className="text-red-400 font-medium">Gastos: {formatCurrency(totalExpense)}</span>
+          <span className="text-neutral-500 font-medium">Neto: {formatCurrency(totalIncome - totalExpense)}</span>
         </div>
       </div>
       <DataTable
